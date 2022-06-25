@@ -43,9 +43,12 @@
 #
 sed 's/,/./g' data.csv > data1.csv
 sed 's/;/,/g' data1.csv > data2.csv
-sed -E 's,([0-9]{2})/([0-9]{2})/([0-9]{2}),20\3-\2-\1,g'data2.csv > data3.csv
-sed -E 's,([0-9]{1})/([0-9]{1})/([0-9]{4}),\3-0\2-0\1,g' data3.csv > data4.csv
-sed 's/,,/\,\\N,/g' data4.csv > data5.csv
-sed 's/[a-z]/\U&/g' data5.csv > data6.csv
-sed 's/,N/,\\N/g' data6.csv > data7.csv
-sed 's/,$/,\\N/' data7.csv > output.csv
+sed 's/\(\b[0-9]\/\)/0\1/' data2.csv > data3.csv
+sed 's/\/\([0-9]\/\)/\/0\1/' data3.csv > data4.csv
+sed 's/\/\([0-9][0-9]\),/\/20\1,/' data4.csv > data5.csv
+sed 's/\([0-9][0-9]\)\/\([0-9][0-9]\)\/\([0-9][0-9][0-9][0-9]\)/\3-\2-\1/' data5.csv > data6.csv
+sed '5 s/,,/,\\N,\\N/g' data6.csv > data7.csv
+sed '6 s/,,n/,\\N,\\N/g' data7.csv > data8.csv
+sed 'y/acn/ACN/' data8.csv > data9.csv
+sed '7 s/N,/N,\\N/g' data9.csv > data10.csv
+sed '4 s/,N,/,\\N,/g' data10.csv > output.csv
